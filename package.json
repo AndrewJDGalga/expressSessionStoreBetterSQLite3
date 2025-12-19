@@ -1,0 +1,25 @@
+{
+  "name": "esesh-bsqlite-store",
+  "version": "0.0.0",
+  "description": "Custom store for the express-session middleware based in SQLite3 and better-sqlite3.",
+  "keywords": [
+    "express-session",
+    "better-sqlite3",
+    "session store"
+  ],
+  "homepage": "https://github.com/AndrewJDGalga/expressSessionStoreBetterSQLite3#readme",
+  "bugs": {
+    "url": "https://github.com/AndrewJDGalga/expressSessionStoreBetterSQLite3/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndrewJDGalga/expressSessionStoreBetterSQLite3.git"
+  },
+  "license": "MIT",
+  "author": "AndrewJDGalga",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
