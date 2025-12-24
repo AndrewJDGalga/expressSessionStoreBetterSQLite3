@@ -2,16 +2,18 @@ import session from "express-session";
 import Database from "better-sqlite3";
 
 class ExpressSessionStore extends session.Store {
-    constructor(options = {}) {
+    #location;
+    constructor(options) {
         super(options);
-
+        this.#location = options.dbPath || './db/sessions.db';
+        const db = this.#dbConn(this.#location, (e)=>{ throw e});
     }
-    #dbConn(location){
+    #dbConn(location, callback){
         let db = null;
         try {
             db = new Database(location, {verbose: console.log});
         }catch(e) {
-            
+            callback(e);
         }
         return db;
     }
