@@ -7,7 +7,7 @@ class ExpressSessionStore extends session.Store {
     #location;
     constructor(options) {
         super(options);
-        this.#location = options.dbPath || './db/sessions.db';
+        this.#location = options.dbPath || './sessions.db';
         const db = this.#dbConn(this.#location, (e)=>{ throw e});
     }
     #dbConn(location, callback){
