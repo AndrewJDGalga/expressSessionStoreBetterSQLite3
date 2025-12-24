@@ -5,22 +5,18 @@ export {ExpressSessionStore};
 
 class ExpressSessionStore extends session.Store {
     #location;
-    #dbConn(location, callback){
-        let db = null;
-        try {
-            db = new Database(location, {verbose: console.log});
-        }catch(e) {
-            callback(e);
-        }
-        return db;
+    #tableName = 'express-session';
+    #defaultLocation = './sessions.db';
+    #dbConn(){
+        return new Database(this.#location, {verbose: console.log});
     }
 
     constructor(options) {
         super(options);
-        this.#location = options.dbPath || './sessions.db';
-        const db = this.#dbConn(this.#location, (err)=>{ throw err});
+        this.#location = options.dbPath || this.#defaultLocation;
+        const db = this.#dbConn();
         db.exec(`
-            create table if not exists express-session (
+            create table if not exists ${this.#tableName} (
                 sid text primary key,
                 sess text not null,
                 expire integer not null
@@ -29,10 +25,21 @@ class ExpressSessionStore extends session.Store {
         db.close();
     }
     get(sid, callback=null){
-
+        let res = null;
+        try {
+            
+        }catch(e){
+            if(callback) callback(e);
+        }
     }
     set(sid, sessionData, callback=null){
-
+        let res = null;
+        try {
+            const db = this.#dbConn();
+            
+        }catch(e){
+            if(callback) callback(e);
+        }
     }
     destroy(sid, callback=null){
 
