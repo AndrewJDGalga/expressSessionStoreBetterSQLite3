@@ -8,7 +8,15 @@ class ExpressSessionStore extends session.Store {
     constructor(options) {
         super(options);
         this.#location = options.dbPath || './sessions.db';
-        const db = this.#dbConn(this.#location, (e)=>{ throw e});
+        const db = this.#dbConn(this.#location, (err)=>{ throw err});
+        db.exec(`
+            create table if not exists sessions (
+                sid text primary key,
+                sess text not null,
+                expire integer not null
+            );
+        `);
+        db.close();
     }
     #dbConn(location, callback){
         let db = null;
