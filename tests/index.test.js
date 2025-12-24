@@ -1,5 +1,10 @@
 import assert from 'node:assert';
+import { ExpressSessionStore } from '../index.js';
 
-describe('TODO Remove because mocha is working', ()=>{
-    assert.ok('Yes');
+describe('Database connection', ()=>{
+    describe('haults when', ()=>{
+        it('a location issue arises', ()=>{
+            assert.throws(()=>new ExpressSessionStore('../jimmies/db.db'));
+        });
+    });
 });
