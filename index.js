@@ -4,17 +4,19 @@ import Database from "better-sqlite3";
 export {ExpressSessionStore};
 
 class ExpressSessionStore extends session.Store {
-    #tableName = 'express-session';
+    #defaultTableName = 'express-session';
     #defaultLocation = './sessions.db';
     #defaultAge = 86400000; //24hrs
-
     #dbConnection;
+    #tableName;
+
     
     constructor(options) {
         super(options);
         this.#dbConnection = options.db ?? new Database(options.dbPath || this.#defaultLocation);
+        this.#tableName = options.tableName || this.#defaultTableName;
 
-        db.exec(`
+        this.#dbConnection.exec(`
             create table if not exists ${this.#tableName} (
                 sid text primary key,
                 sess text not null,
@@ -32,9 +34,8 @@ class ExpressSessionStore extends session.Store {
     }
     set(sid, sessionData, callback=null){
         try {
-            
             const expire = Date.now() + (sessionData.cookie.maxAge || this.#defaultAge);
-            db.prepare(`
+            this.#dbConnection.prepare(`
                 insert or replace into ${this.#tableName} (sid, sess, expire)
                     values(?,?,?)
             `).run(sid, JSON.stringify(sessionData), expire);
