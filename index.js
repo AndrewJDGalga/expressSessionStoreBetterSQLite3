@@ -10,7 +10,6 @@ class ExpressSessionStore extends session.Store {
     #dbConnection;
     #tableName;
 
-    
     constructor(options) {
         super(options);
         this.#dbConnection = options.db ?? new Database(options.dbPath || this.#defaultLocation);
@@ -39,8 +38,9 @@ class ExpressSessionStore extends session.Store {
                 insert or replace into ${this.#tableName} (sid, sess, expire)
                     values(?,?,?)
             `).run(sid, JSON.stringify(sessionData), expire);
+            callback?.(null);
         }catch(e){
-            if(callback) callback(e);
+            callback?.(e);
         }
     }
     destroy(sid, callback=null){
