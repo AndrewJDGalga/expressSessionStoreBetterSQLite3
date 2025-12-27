@@ -47,7 +47,6 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
-    //abstract destroy(sid: string, callback?: (err?: any) => void): void;
     destroy(sid, callback=null){
         try {
             this.#dbConnection.prepare(`
@@ -58,8 +57,16 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
-    all(callback=null) {
-
+    all(callback) {
+        try {
+            const allRows = this.#dbConnection(`
+                select sess from ${this.#tableName};
+            `).all();
+            const sessData = allRows ? JSON.parse(allRows.sess) : null;
+            callback(null, sessData);
+        }catch(e){
+            callback(e, null);
+        }
     }
     length(callback=null){
 
