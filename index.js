@@ -28,7 +28,7 @@ class ExpressSessionStore extends session.Store {
             const row = this.#dbConnection.prepare(`
                 select sess from ${this.#tableName}
                     where sid = ?
-            `).run(sid);
+            `).get(sid);
             const sessData = row ? JSON.parse(row.sess) : null;
             callback(null, sessData);
         }catch(e){
@@ -68,8 +68,16 @@ class ExpressSessionStore extends session.Store {
             callback(e, null);
         }
     }
-    length(callback=null){
-
+    //length?(callback: (err: any, length?: number) => void): void;
+    length(callback){
+        try{
+            const numRows = this.#dbConnection(`
+                select count(*) from ${this.#tableName}
+            `).pluck();
+            callback(null, numRows);
+        }catch(e){
+            callback(e, null);
+        }
     }
     clear(callback=null){
 
