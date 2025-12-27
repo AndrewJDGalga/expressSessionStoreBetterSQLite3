@@ -47,8 +47,16 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
+    //abstract destroy(sid: string, callback?: (err?: any) => void): void;
     destroy(sid, callback=null){
-
+        try {
+            this.#dbConnection.prepare(`
+                delete from ${this.#tableName} where sid = ?
+            `).run(sid);
+            callback?.(null);
+        }catch(e){
+            callback?.(e);
+        }
     }
     all(callback=null) {
 
