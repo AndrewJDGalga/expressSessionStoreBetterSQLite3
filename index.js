@@ -68,7 +68,6 @@ class ExpressSessionStore extends session.Store {
             callback(e, null);
         }
     }
-    //length?(callback: (err: any, length?: number) => void): void;
     length(callback){
         try{
             const numRows = this.#dbConnection(`
@@ -80,7 +79,14 @@ class ExpressSessionStore extends session.Store {
         }
     }
     clear(callback=null){
-
+        try{
+            this.#dbConnection(`
+                delete from ${this.#tableName}
+            `).run();
+            callback?.(null);
+        }catch(e){
+            callback?.(e);
+        }
     }
     touch(sid, sessionData, callback=null){
 
