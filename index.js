@@ -23,12 +23,16 @@ class ExpressSessionStore extends session.Store {
             );
         `);
     }
-    get(sid, callback=null){
-        let res = null;
+    get(sid, callback){
         try {
-            
+            const row = this.#dbConnection.prepare(`
+                select sess from ${this.#tableName}
+                    where sid = ?
+            `).run(sid);
+            const sessData = row ? JSON.parse(row.sess) : null;
+            callback(null, sessData);
         }catch(e){
-            if(callback) callback(e);
+            callback(e, null);
         }
     }
     set(sid, sessionData, callback=null){
