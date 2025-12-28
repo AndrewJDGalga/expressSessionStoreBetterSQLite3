@@ -25,7 +25,7 @@ describe('ExpressSessionStore object', ()=>{
 
     describe('get method', ()=>{
         describe('retrieves session data', ()=>{
-            it('successfully', ()=>{
+            it('successfully', (done)=>{
                 const sid = 'test-sess-id';
                 const sessData = { userId: 123, cookie: { maxAge: 1 }};
                 const row = {sess: JSON.stringify(sessData)};
@@ -35,7 +35,32 @@ describe('ExpressSessionStore object', ()=>{
                     assert.strictEqual(err, null);
                     assert.deepStrictEqual(data, sessData);
                 });
+                done();
             });
         });
+    });
+
+    describe('set method', ()=>{
+
+    });
+
+    decribe('destroy method', ()=>{
+
+    });
+
+    decribe('all method', ()=>{
+
+    });
+
+    decribe('length method', ()=>{
+
+    });
+
+    decribe('clear method', ()=>{
+
+    });
+
+    decribe('touch method', ()=>{
+
     });
 });
