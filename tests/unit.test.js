@@ -1,11 +1,41 @@
 import assert from 'node:assert';
+import sinon from 'sinon';
 import { ExpressSessionStore } from '../index.js';
 
-describe('Database connection', ()=>{
-    
-    describe('haults when', ()=>{
-        it('a location issue arises', ()=>{
-            assert.throws(()=>new ExpressSessionStore('../jimmies/db.db'));
+describe('ExpressSessionStore object', ()=>{
+    let store;
+    let mockDB;
+
+    beforeEach(()=>{
+        mockDB = {
+            exec: sinon.stub(),
+            prepare: sinon.stub().returns({
+                get: sinon.stub(),
+                run: sinon.stub(),
+                all: sinon.stub(),
+                pluck: sinon.stub()
+            })
+        };
+        store = new ExpressSessionStore({ db: mockDB });
+    });
+
+    afterEach(()=>{
+        sinon.restore();
+    });
+
+    describe('get method', ()=>{
+        describe('retrieves session data', ()=>{
+            it('successfully', ()=>{
+                const sid = 'test-sess-id';
+                const sessData = { userId: 123, cookie: { maxAge: 1 }};
+                const row = {sess: JSON.stringify(sessData)};
+                mockDB.prepare().get.withArgs(sid).returns(row);
+
+                store.get(sid, (err, data)=>{
+                    assert.strictEqual(err, null);
+                    assert.deepStrictEqual(data, sessData);
+                });
+            });
         });
     });
 });

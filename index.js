@@ -23,6 +23,7 @@ class ExpressSessionStore extends session.Store {
             );
         `);
     }
+    
     get(sid, callback){
         try {
             const row = this.#dbConnection.prepare(`

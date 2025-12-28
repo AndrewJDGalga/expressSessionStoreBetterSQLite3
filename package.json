@@ -22,11 +22,9 @@
   "scripts": {
     "test": "mocha ./tests"
   },
-  "dependencies": {
-    "better-sqlite3": "^12.5.0",
-    "express-session": "^1.18.2"
-  },
   "devDependencies": {
+    "better-sqlite3": "^12.5.0",
+    "express-session": "^1.18.2",
     "sinon": "^21.0.1",
     "mocha": "^11.7.5"
   }
