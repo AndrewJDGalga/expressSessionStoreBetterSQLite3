@@ -59,7 +59,7 @@ class ExpressSessionStore extends session.Store {
     }
     all(callback) {
         try {
-            const allRows = this.#dbConnection(`
+            const allRows = this.#dbConnection.prepare(`
                 select sess from ${this.#tableName};
             `).all();
             const sessData = allRows ? JSON.parse(allRows.sess) : null;
@@ -70,7 +70,7 @@ class ExpressSessionStore extends session.Store {
     }
     length(callback){
         try{
-            const numRows = this.#dbConnection(`
+            const numRows = this.#dbConnection.prepare(`
                 select count(*) from ${this.#tableName}
             `).pluck();
             callback(null, numRows);
@@ -80,7 +80,7 @@ class ExpressSessionStore extends session.Store {
     }
     clear(callback=null){
         try{
-            this.#dbConnection(`
+            this.#dbConnection.prepare(`
                 delete from ${this.#tableName}
             `).run();
             callback?.(null);
@@ -88,7 +88,18 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
+    //touch?(sid: string, session: SessionData, callback?: () => void): void;
     touch(sid, sessionData, callback=null){
-
+        try{
+            const expire = Date.now() + (sessionData.cookie.maxAge || this.#defaultAge);
+            this.#dbConnection.prepare(`
+                update ${this.#tableName}
+                set expire = ?
+                where sid = ?
+            `).run(expire, sid);
+            callback?.(null);
+        }catch(e){
+            callback?.(e);
+        }
     }
 }
