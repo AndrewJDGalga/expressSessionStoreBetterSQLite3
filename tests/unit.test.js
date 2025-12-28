@@ -27,7 +27,7 @@ describe('ExpressSessionStore object', ()=>{
         describe('retrieves session data', ()=>{
             const sid = 'test-sess-id';
             
-            it('successful match and data', (done)=>{
+            it('match and data', (done)=>{
                 const sessData = { userId: 123, cookie: { maxAge: 1 }};
                 const row = {sess: JSON.stringify(sessData)};
                 mockDB.prepare().get.withArgs(sid).returns(row);
@@ -35,15 +35,28 @@ describe('ExpressSessionStore object', ()=>{
                 store.get(sid, (err, data)=>{
                     assert.strictEqual(err, null);
                     assert.deepStrictEqual(data, sessData);
+                    done();
                 });
-                done();
             });
-            it('successful no match and null', ()=>{
+
+            it('no match and null', (done)=>{
                 mockDB.prepare().get.withArgs(sid).returns(null);
                 store.get(sid, (err, data)=>{
                     assert.strictEqual(err, null);
                     assert.strictEqual(data, null);
+                    done();
                 })
+            });
+
+            it('database error', (done)=>{
+                const error = new Error('Database Error');
+                mockDB.prepare().get.withArgs(sid).throws(error);
+
+                store.get(sid, (err, data)=>{
+                    assert.strictEqual(error, err);
+                    assert.strictEqual(data, null);
+                    done();
+                });
             });
         });
     });
