@@ -25,8 +25,9 @@ describe('ExpressSessionStore object', ()=>{
 
     describe('get method', ()=>{
         describe('retrieves session data', ()=>{
-            it('successfully', (done)=>{
-                const sid = 'test-sess-id';
+            const sid = 'test-sess-id';
+            
+            it('successful match and data', (done)=>{
                 const sessData = { userId: 123, cookie: { maxAge: 1 }};
                 const row = {sess: JSON.stringify(sessData)};
                 mockDB.prepare().get.withArgs(sid).returns(row);
@@ -37,6 +38,13 @@ describe('ExpressSessionStore object', ()=>{
                 });
                 done();
             });
+            it('successful no match and null', ()=>{
+                mockDB.prepare().get.withArgs(sid).returns(null);
+                store.get(sid, (err, data)=>{
+                    assert.strictEqual(err, null);
+                    assert.strictEqual(data, null);
+                })
+            });
         });
     });
 
@@ -44,23 +52,23 @@ describe('ExpressSessionStore object', ()=>{
 
     });
 
-    decribe('destroy method', ()=>{
+    describe('destroy method', ()=>{
 
     });
 
-    decribe('all method', ()=>{
+    describe('all method', ()=>{
 
     });
 
-    decribe('length method', ()=>{
+    describe('length method', ()=>{
 
     });
 
-    decribe('clear method', ()=>{
+    describe('clear method', ()=>{
 
     });
 
-    decribe('touch method', ()=>{
+    describe('touch method', ()=>{
 
     });
 });
