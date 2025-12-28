@@ -88,7 +88,6 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
-    //touch?(sid: string, session: SessionData, callback?: () => void): void;
     touch(sid, sessionData, callback=null){
         try{
             const expire = Date.now() + (sessionData.cookie.maxAge || this.#defaultAge);
