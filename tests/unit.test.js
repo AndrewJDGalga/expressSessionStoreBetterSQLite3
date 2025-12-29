@@ -114,36 +114,6 @@ describe('ExpressSessionStore object', ()=>{
         });
     });
 
-    /*
-        { : { userId: 123, cookie: { maxAge: 1 }}},
-            { userId: 124, cookie: { maxAge: 1 }},
-            { userId: 125, cookie: { maxAge: 1 }}
-
-        {
-            sid : 'test-sess-id',
-            sess : { userId: 123, cookie: { maxAge: 1 }},
-            expire : 1
-        }, 
-        {
-            sid : 'test-sess-id1',
-            sess : { userId: 124, cookie: { maxAge: 1 }},
-            expire : 1
-        }, 
-        {
-            sid : 'test-sess-id2',
-            sess : { userId: 125, cookie: { maxAge: 1 }},
-            expire : 1
-        }
-            {
-                    sess : { userId: 123, cookie: { maxAge: 1 }}
-                }, 
-                {
-                    sess : { userId: 124, cookie: { maxAge: 1 }}
-                }, 
-                {
-                    sess : { userId: 125, cookie: { maxAge: 1 }}
-                }
-    */
     describe('all method', ()=>{
         it('retrieved all', (done)=>{
             const sessions = ([
@@ -158,6 +128,14 @@ describe('ExpressSessionStore object', ()=>{
                 assert.strictEqual(e, null);
                 assert.deepStrictEqual(val, sessions);
                 done();
+            })
+        });
+        it('null return', ()=>{
+            mockDB.prepare().all.returns(null);
+
+            store.all((e, val)=>{
+                assert.strictEqual(e, null);
+                assert.strictEqual(val, null);
             })
         });
         it('error', ()=>{
