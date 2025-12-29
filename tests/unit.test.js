@@ -63,23 +63,32 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('set method', ()=>{
-        describe('new entry', ()=>{
+        let expire;
 
+        beforeEach(()=>{
+            expire = Date.now()+1;
         });
 
-        describe('failed entry', ()=>{
-            
-            it('database error', ()=>{
-                const sid = 'test-sess-id';
-                const sessData = { userId: 123, cookie: { maxAge: 1 }};
-                const error = new Error('Database Error');
-                const strified = JSON.stringify(sessData);
-                const expire = Date.now() + 1;
-                mockDB.prepare().run.withArgs(sid, strified, expire).throws(error);
+        const sid = 'test-sess-id';
+        const sessData = { userId: 123, cookie: { maxAge: 1 }};
+        const sessStr = JSON.stringify(sessData);
 
-                store.set(sid, sessData, (err)=>{
-                    assert.strictEqual(error, err);
-                });
+        it('new entry', (done)=>{
+            mockDB.prepare().run.withArgs(sid, sessStr, expire);
+
+            store.set(sid, sessData, (err)=>{
+                assert.strictEqual(err, null);
+                done();
+            });
+        });
+
+        it('database error', (done)=>{
+            const error = new Error('Database Error');
+            mockDB.prepare().run.withArgs(sid, sessStr, expire).throws(error);
+
+            store.set(sid, sessData, (err)=>{
+                assert.strictEqual(err, error);
+                done();
             });
         });
     });
