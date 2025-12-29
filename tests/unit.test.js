@@ -200,15 +200,25 @@ describe('ExpressSessionStore object', ()=>{
         const sid = 'test-sess-id';
         const sessData = { userId: 123, cookie: { maxAge: 1 }};
 
-        it('updated session expiration', ()=>{
-
+        let expire;
+        beforeEach(()=>{
+            sinon.stub(Date, 'now').returns(1000);
+            expire = Date.now()+1;
+        })
+        afterEach(()=>{
+            sinon.restore();
         });
-        it("didn't update session expiration", ()=>{
 
+        it("did or didn't update session", ()=>{
+            mockDB.prepare().run.withArgs(expire, sid).returns(null);
+            
+            store.touch(sid, sessData, (e)=>{
+                assert.strictEqual(e, null);
+            });
         });
         it('database error', ()=>{
             const error = new Error('Some Database Error');
-            mockDB.prepare().run.throws(error);
+            mockDB.prepare().run.withArgs(expire, sid).throws(error);
 
             store.touch(sid, sessData, (e)=>{
                 assert.strictEqual(e, error);
