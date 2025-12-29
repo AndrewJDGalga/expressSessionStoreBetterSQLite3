@@ -150,7 +150,21 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('length method', ()=>{
+        it('count return', ()=>{
 
+        });
+        it('null count', ()=>{
+
+        });
+        it('error return', ()=>{
+            const error = new Error('Some Database Error');
+            mockDB.prepare().pluck.throws(error);
+
+            store.length((e, val)=>{
+                assert.strictEqual(e, error);
+                assert.strictEqual(val, null);
+            });
+        });
     });
 
     describe('clear method', ()=>{
