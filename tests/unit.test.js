@@ -63,14 +63,13 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('set method', ()=>{
-        let clock, expire;
+        let expire;
         beforeEach(()=>{
-            clock = sinon.useFakeTimers();
+            sinon.stub(Date, 'now').returns(1000);
             expire = Date.now()+1;
-            console.log(expire);
-        });
+        })
         afterEach(()=>{
-            clock.restore();
+            sinon.restore();
         });
 
         const sid = 'test-sess-id';
