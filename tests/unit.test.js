@@ -114,8 +114,61 @@ describe('ExpressSessionStore object', ()=>{
         });
     });
 
-    describe('all method', ()=>{
+    /*
+        { : { userId: 123, cookie: { maxAge: 1 }}},
+            { userId: 124, cookie: { maxAge: 1 }},
+            { userId: 125, cookie: { maxAge: 1 }}
 
+        {
+            sid : 'test-sess-id',
+            sess : { userId: 123, cookie: { maxAge: 1 }},
+            expire : 1
+        }, 
+        {
+            sid : 'test-sess-id1',
+            sess : { userId: 124, cookie: { maxAge: 1 }},
+            expire : 1
+        }, 
+        {
+            sid : 'test-sess-id2',
+            sess : { userId: 125, cookie: { maxAge: 1 }},
+            expire : 1
+        }
+            {
+                    sess : { userId: 123, cookie: { maxAge: 1 }}
+                }, 
+                {
+                    sess : { userId: 124, cookie: { maxAge: 1 }}
+                }, 
+                {
+                    sess : { userId: 125, cookie: { maxAge: 1 }}
+                }
+    */
+    describe('all method', ()=>{
+        it('retrieved all', (done)=>{
+            const sessions = ([
+                { userId: 123, cookie: { maxAge: 1 }},
+                { userId: 124, cookie: { maxAge: 1 }},
+                { userId: 125, cookie: { maxAge: 1 }}
+            ]);
+            const mockRows = sessions.map(session => ({sess: JSON.stringify(session)}));
+            mockDB.prepare().all.returns(mockRows);
+
+            store.all((e, val)=>{
+                assert.strictEqual(e, null);
+                assert.deepStrictEqual(val, sessions);
+                done();
+            })
+        });
+        it('error', ()=>{
+            const error = new Error('Some Database Error');
+            mockDB.prepare().all.throws(error);
+
+            store.all((e, val)=>{
+                assert.strictEqual(e, error);
+                assert.strictEqual(val, null);
+            });
+        });
     });
 
     describe('length method', ()=>{
