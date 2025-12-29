@@ -151,12 +151,18 @@ describe('ExpressSessionStore object', ()=>{
 
     describe('length method', ()=>{
         it('count return', ()=>{
+            const someCount = [4];
+            mockDB.prepare().pluck.returns(someCount);
 
+            store.length((e, val)=>{
+                assert.strictEqual(e, null);
+                assert.strictEqual(val, someCount);
+            });
         });
         it('null return', ()=>{
             mockDB.prepare().pluck.returns(null);
 
-            store.all((e, val)=>{
+            store.length((e, val)=>{
                 assert.strictEqual(e, null);
                 assert.strictEqual(val, null);
             });
