@@ -24,10 +24,10 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('get method', ()=>{
-        describe('retrieves session data', ()=>{
-            const sid = 'test-sess-id';
-            
-            it('match and data', (done)=>{
+        const sid = 'test-sess-id';
+        
+        describe('retrieves session data', ()=>{    
+            it('success', (done)=>{
                 const sessData = { userId: 123, cookie: { maxAge: 1 }};
                 const row = {sess: JSON.stringify(sessData)};
                 mockDB.prepare().get.withArgs(sid).returns(row);
@@ -38,7 +38,9 @@ describe('ExpressSessionStore object', ()=>{
                     done();
                 });
             });
+        });
 
+        describe('fails to retrieve session data', ()=>{
             it('no match and null', (done)=>{
                 mockDB.prepare().get.withArgs(sid).returns(null);
                 store.get(sid, (err, data)=>{
@@ -47,11 +49,10 @@ describe('ExpressSessionStore object', ()=>{
                     done();
                 })
             });
-
             it('database error', (done)=>{
                 const error = new Error('Database Error');
                 mockDB.prepare().get.withArgs(sid).throws(error);
-
+    
                 store.get(sid, (err, data)=>{
                     assert.strictEqual(error, err);
                     assert.strictEqual(data, null);
@@ -62,7 +63,25 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('set method', ()=>{
+        describe('new entry', ()=>{
 
+        });
+
+        describe('failed entry', ()=>{
+            
+            it('database error', ()=>{
+                const sid = 'test-sess-id';
+                const sessData = { userId: 123, cookie: { maxAge: 1 }};
+                const error = new Error('Database Error');
+                const strified = JSON.stringify(sessData);
+                const expire = Date.now() + 1;
+                mockDB.prepare().run.withArgs(sid, strified, expire).throws(error);
+
+                store.set(sid, sessData, (err)=>{
+                    assert.strictEqual(error, err);
+                });
+            });
+        });
     });
 
     describe('destroy method', ()=>{
