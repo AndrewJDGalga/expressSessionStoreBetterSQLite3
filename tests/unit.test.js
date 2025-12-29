@@ -181,7 +181,7 @@ describe('ExpressSessionStore object', ()=>{
     describe('clear method', ()=>{
         it('cleared DB', ()=>{
             mockDB.prepare().run;
-            
+
             store.clear((e)=>{
                 assert.strictEqual(e, null);
             });
@@ -197,6 +197,22 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('touch method', ()=>{
+        const sid = 'test-sess-id';
+        const sessData = { userId: 123, cookie: { maxAge: 1 }};
 
+        it('updated session expiration', ()=>{
+
+        });
+        it("didn't update session expiration", ()=>{
+
+        });
+        it('database error', ()=>{
+            const error = new Error('Some Database Error');
+            mockDB.prepare().run.throws(error);
+
+            store.touch(sid, sessData, (e)=>{
+                assert.strictEqual(e, error);
+            });
+        });
     });
 });
