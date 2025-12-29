@@ -79,8 +79,8 @@ describe('ExpressSessionStore object', ()=>{
         it('new entry', ()=>{
             mockDB.prepare().run.withArgs(sid, sessStr, expire);
 
-            store.set(sid, sessData, (err)=>{
-                assert.strictEqual(err, null);
+            store.set(sid, sessData, (e)=>{
+                assert.strictEqual(e, null);
             });
         });
 
@@ -98,7 +98,11 @@ describe('ExpressSessionStore object', ()=>{
         const sid = 'test-sess-id';
 
         it('deleted successfully', ()=>{
+            mockDB.prepare().run.withArgs(sid);
 
+            store.destroy(sid, (e)=>{
+                assert.strictEqual(e, null);
+            });
         });
         it('deletion failed', ()=>{
             const error = new Error('Some Database Error');
