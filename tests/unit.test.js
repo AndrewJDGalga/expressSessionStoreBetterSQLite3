@@ -179,7 +179,21 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('clear method', ()=>{
+        it('cleared DB', ()=>{
+            mockDB.prepare().run;
+            
+            store.clear((e)=>{
+                assert.strictEqual(e, null);
+            });
+        });
+        it('failed to clear', ()=>{
+            const error = new Error('Some Database Error');
+            mockDB.prepare().run.throws(error);
 
+            store.clear((e)=>{
+                assert.strictEqual(e, error);
+            });
+        });
     });
 
     describe('touch method', ()=>{
