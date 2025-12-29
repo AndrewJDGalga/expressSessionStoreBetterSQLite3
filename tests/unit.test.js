@@ -136,7 +136,7 @@ describe('ExpressSessionStore object', ()=>{
             store.all((e, val)=>{
                 assert.strictEqual(e, null);
                 assert.strictEqual(val, null);
-            })
+            });
         });
         it('error', ()=>{
             const error = new Error('Some Database Error');
@@ -153,8 +153,13 @@ describe('ExpressSessionStore object', ()=>{
         it('count return', ()=>{
 
         });
-        it('null count', ()=>{
+        it('null return', ()=>{
+            mockDB.prepare().pluck.returns(null);
 
+            store.all((e, val)=>{
+                assert.strictEqual(e, null);
+                assert.strictEqual(val, null);
+            });
         });
         it('error return', ()=>{
             const error = new Error('Some Database Error');
