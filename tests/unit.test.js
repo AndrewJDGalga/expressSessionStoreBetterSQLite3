@@ -242,5 +242,17 @@ describe('ExpressSessionStore object', ()=>{
                 assert.strictEqual(e, error);
             });
         });
-    })
+        it('removes items', (done)=>{
+            const clock = sinon.useFakeTimers();
+            mockDB.prepare().run.withArgs(Date.now());
+            clock.tick();
+
+            store.cleanup((e)=>{
+                assert.strictEqual(e, null);
+            });
+
+            clock.restore();
+            done();
+        });
+    });
 });
