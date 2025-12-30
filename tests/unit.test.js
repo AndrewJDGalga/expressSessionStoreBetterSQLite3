@@ -234,5 +234,13 @@ describe('ExpressSessionStore object', ()=>{
                 assert.strictEqual(e, null);
             });
         });
+        it('database error', ()=>{
+            const error = new Error('Some Database Error');
+            mockDB.prepare().run.withArgs(Date.now()).throws(error);
+
+            store.cleanup((e)=>{
+                assert.strictEqual(e, error);
+            });
+        });
     })
 });
