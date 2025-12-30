@@ -148,4 +148,16 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
+
+
+    cleanup(callback=null){
+        try {
+            this.#dbConnection.prepare(`
+                delete from ${this.#tableName} where expire < ?
+            `).run(Date.now());
+            callback?.(null);
+        }catch(e){
+            callback?.(e);
+        }
+    }
 }
