@@ -225,4 +225,14 @@ describe('ExpressSessionStore object', ()=>{
             });
         });
     });
+
+    describe('cleanup method', ()=>{
+        it('null to clean',()=>{
+            mockDB.prepare().run.withArgs(Date.now());
+
+            store.cleanup((e)=>{
+                assert.strictEqual(e, null);
+            });
+        });
+    })
 });
