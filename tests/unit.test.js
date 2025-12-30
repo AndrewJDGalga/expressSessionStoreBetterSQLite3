@@ -116,11 +116,11 @@ describe('ExpressSessionStore object', ()=>{
 
     describe('all method', ()=>{
         it('retrieved all', (done)=>{
-            const sessions = ([
+            const sessions = [
                 { userId: 123, cookie: { maxAge: 1 }},
                 { userId: 124, cookie: { maxAge: 1 }},
                 { userId: 125, cookie: { maxAge: 1 }}
-            ]);
+            ];
             const mockRows = sessions.map(session => ({sess: JSON.stringify(session)}));
             mockDB.prepare().all.returns(mockRows);
 

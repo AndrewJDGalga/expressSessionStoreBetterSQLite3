@@ -10,6 +10,10 @@ class ExpressSessionStore extends session.Store {
     #dbConnection;
     #tableName;
 
+    /**
+     * @access public
+     * @param {Object} options 
+     */
     constructor(options) {
         super(options);
         this.#dbConnection = options.db ?? new Database(options.dbPath || this.#defaultLocation);
@@ -24,6 +28,12 @@ class ExpressSessionStore extends session.Store {
         `);
     }
     
+    /**
+     * Get SessionData by ID
+     * @access public
+     * @param {string} sid 
+     * @param {function({null | Error}, {null | Object})} callback
+     */
     get(sid, callback){
         try {
             const row = this.#dbConnection.prepare(`
@@ -36,6 +46,14 @@ class ExpressSessionStore extends session.Store {
             callback(e, null);
         }
     }
+
+    /**
+     * Set SessionData
+     * @access public
+     * @param {string} sid 
+     * @param {Object} sessionData
+     * @param {null | function({null | Error})} callback
+     */
     set(sid, sessionData, callback=null){
         try {
             const expire = Date.now() + (sessionData.cookie.maxAge || this.#defaultAge);
@@ -48,6 +66,12 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
+
+    /**
+     * Remove session
+     * @param {string} sid 
+     * @param {null | function({null | Error})} callback 
+     */
     destroy(sid, callback=null){
         try {
             this.#dbConnection.prepare(`
@@ -58,6 +82,11 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
+
+    /**
+     * Retrieve all sessions
+     * @param {function({null | Error}, {null | Object[]})} callback 
+     */
     all(callback) {
         try {
             const allRows = this.#dbConnection.prepare(`
@@ -69,6 +98,11 @@ class ExpressSessionStore extends session.Store {
             callback(e, null);
         }
     }
+
+    /**
+     * Count of sessions
+     * @param {function({null | Error}, {null | Object[]})} callback 
+     */
     length(callback){
         try{
             const numRows = this.#dbConnection.prepare(`
@@ -79,6 +113,11 @@ class ExpressSessionStore extends session.Store {
             callback(e, null);
         }
     }
+
+    /**
+     * Remove all sessions
+     * @param {null | function({null | Error})} callback 
+     */
     clear(callback=null){
         try{
             this.#dbConnection.prepare(`
@@ -89,6 +128,13 @@ class ExpressSessionStore extends session.Store {
             callback?.(e);
         }
     }
+
+    /**
+     * Update session expiration
+     * @param {string} sid 
+     * @param {Object} sessionData 
+     * @param {null | function({null | Error})} callback 
+     */
     touch(sid, sessionData, callback=null){
         try{
             const expire = Date.now() + (sessionData.cookie.maxAge || this.#defaultAge);
