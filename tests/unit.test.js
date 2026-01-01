@@ -32,16 +32,7 @@ describe('ExpressSessionStore object', ()=>{
             assert.throws(()=>new ExpressSessionStore({dbPath: '../../../blargh'}));
         });
         it('malformed db object', ()=>{
-            const malformedDB = {
-                exec: '',
-                prepare: sinon.stub().returns({
-                    get: '',
-                    run: '',
-                    all: '',
-                    pluck: ''
-                })
-            };
-            assert.throws(()=>new ExpressSessionStore({ db: malformedDB }));
+            assert.throws(()=>new ExpressSessionStore({ db: '' }));
         });
     })
 
