@@ -43,13 +43,30 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('class internal type expectation', ()=>{
+        const sid = 'test-sess-id';
+
         it('get throws sid type', ()=>{
+            const sessData = { userId: 123, cookie: { maxAge: 1 }};
+            const row = {sess: JSON.stringify(sessData)};
+            mockDB.prepare().get.withArgs(sid).returns(row);
+            
             store.get(22, (err, _)=>{
                 assert.strictEqual(typeof(err), 'object');
             });
         });
         it('get throws sid empty', ()=>{
+            const sessData = { userId: 123, cookie: { maxAge: 1 }};
+            const row = {sess: JSON.stringify(sessData)};
+            mockDB.prepare().get.withArgs(sid).returns(row);
+
             store.get('', (err, _)=>{
+                assert.strictEqual(typeof(err), 'object');
+            });
+        });
+        it('touch throws sessionData empty', ()=>{
+            mockDB.prepare().run.withArgs(Date.now()+1, sid).returns(null);
+
+            store.touch(sid, {}, (err, _)=>{
                 assert.strictEqual(typeof(err), 'object');
             });
         });
