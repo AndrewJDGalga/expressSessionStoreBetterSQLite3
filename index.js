@@ -18,9 +18,7 @@ class ExpressSessionStore extends session.Store {
      * @access public
      * @param {Object} options 
      */
-    constructor(options={}) {
-        this.#typecheck(options, 'Object', 'constructor');
-
+    constructor(options) {
         super(options);
         this.#dbConnection = options.db ?? new Database(options.dbPath || this.#defaultLocation);
         this.#tableName = options.tableName || this.#defaultTableName;

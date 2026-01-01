@@ -28,6 +28,9 @@ describe('ExpressSessionStore object', ()=>{
         ->no invalid tablename unit test    
     */
     describe('constructor throws', ()=>{
+        it('non-object', ()=>{
+            assert.throws(()=>new ExpressSessionStore());
+        });
         it('external path', ()=>{
             assert.throws(()=>new ExpressSessionStore({dbPath: '../../../blargh'}));
         });
