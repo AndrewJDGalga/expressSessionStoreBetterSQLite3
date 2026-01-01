@@ -28,8 +28,11 @@ describe('ExpressSessionStore object', ()=>{
         ->no invalid tablename unit test    
     */
     describe('constructor throws', ()=>{
-        it('non-object', ()=>{
+        it('no parameter passed', ()=>{
             assert.throws(()=>new ExpressSessionStore());
+        });
+        it('incorrect parameter type passed', ()=>{
+            assert.throws(()=>new ExpressSessionStore(''));
         });
         it('external path', ()=>{
             assert.throws(()=>new ExpressSessionStore({dbPath: '../../../blargh'}));
