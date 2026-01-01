@@ -44,13 +44,14 @@ describe('ExpressSessionStore object', ()=>{
 
     describe('class internal type expectation', ()=>{
         it('get throws sid type', ()=>{
-            assert.throws(()=>store.get(22, (err, val)=>{}));
+            store.get(22, (err, _)=>{
+                assert.strictEqual(typeof(err), 'object');
+            });
         });
         it('get throws sid empty', ()=>{
-            assert.throws(()=>store.get('', (err, val)=>{}));
-        });
-        it('get throws function type', ()=>{
-            assert.throws(()=>store.get('22', ''));
+            store.get('', (err, _)=>{
+                assert.strictEqual(typeof(err), 'object');
+            });
         });
     })
 

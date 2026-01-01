@@ -49,10 +49,10 @@ class ExpressSessionStore extends session.Store {
      * @param {Function({null | Error}, {null | Object})} callback
      */
     get(sid, callback){
-        this.#typecheck(sid, 'string', 'get');
-        this.#typecheck(callback, 'function', 'get');
-        
         try {
+            this.#typecheck(sid, 'string', 'get');
+            this.#typecheck(callback, 'function', 'get');
+
             const row = this.#dbConnection.prepare(`
                 select sess from ${this.#tableName}
                     where sid = ?
