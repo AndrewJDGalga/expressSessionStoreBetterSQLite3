@@ -23,13 +23,25 @@ describe('ExpressSessionStore object', ()=>{
         sinon.restore();
     });
     
-    /* constructor is simple and will create file 
+    /* constructor is simple and will create file, cannot interrupt in ES6? (sans require)
         ->no empty path unit test 
         ->no invalid tablename unit test    
     */
     describe('constructor throws', ()=>{
         it('external path', ()=>{
-            assert.throws(()=>{new ExpressSessionStore({dbPath: '../../../blargh'})});
+            assert.throws(()=>new ExpressSessionStore({dbPath: '../../../blargh'}));
+        });
+        it('malformed db object', ()=>{
+            const malformedDB = {
+                exec: '',
+                prepare: sinon.stub().returns({
+                    get: '',
+                    run: '',
+                    all: '',
+                    pluck: ''
+                })
+            };
+            assert.throws(()=>new ExpressSessionStore({ db: malformedDB }));
         });
     })
 
