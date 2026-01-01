@@ -40,7 +40,7 @@ class ExpressSessionStore extends session.Store {
      */
     get(sid, callback){
         this.#typecheck(sid, 'string', 'get');
-        this.#typecheck(callback, 'Function', 'get');
+        this.#typecheck(callback, 'function', 'get');
         
         try {
             const row = this.#dbConnection.prepare(`
@@ -63,8 +63,8 @@ class ExpressSessionStore extends session.Store {
      */
     set(sid, sessionData, callback=null){
         this.#typecheck(sid, 'string', 'set');
-        this.#typecheck(sessionData, 'Object', 'set');
-        if(callback !== null) this.#typecheck(callback, 'Function', 'set');
+        this.#typecheck(sessionData, 'object', 'set');
+        if(callback !== null) this.#typecheck(callback, 'function', 'set');
 
         try {
             const expire = Date.now() + (sessionData.cookie.maxAge || this.#defaultAge);
@@ -85,7 +85,7 @@ class ExpressSessionStore extends session.Store {
      */
     destroy(sid, callback=null){
         this.#typecheck(sid, 'string', 'destroy');
-        if(callback !== null) this.#typecheck(callback, 'Function', 'destroy');
+        if(callback !== null) this.#typecheck(callback, 'function', 'destroy');
 
         try {
             this.#dbConnection.prepare(`
@@ -102,7 +102,7 @@ class ExpressSessionStore extends session.Store {
      * @param {Function({null | Error}, {null | Object[]})} callback 
      */
     all(callback) {
-        this.#typecheck(callback, 'Function', 'all');
+        this.#typecheck(callback, 'function', 'all');
 
         try {
             const allRows = this.#dbConnection.prepare(`
@@ -120,7 +120,7 @@ class ExpressSessionStore extends session.Store {
      * @param {Function({null | Error}, {null | Object[]})} callback 
      */
     length(callback){
-        this.#typecheck(callback, 'Function', 'length');
+        this.#typecheck(callback, 'function', 'length');
 
         try{
             const numRows = this.#dbConnection.prepare(`
@@ -137,7 +137,7 @@ class ExpressSessionStore extends session.Store {
      * @param {null | Function({null | Error})} callback 
      */
     clear(callback=null){
-        if(callback !== null) this.#typecheck(callback, 'Function', 'clear');
+        if(callback !== null) this.#typecheck(callback, 'function', 'clear');
 
         try{
             this.#dbConnection.prepare(`
@@ -157,8 +157,8 @@ class ExpressSessionStore extends session.Store {
      */
     touch(sid, sessionData, callback=null){
         this.#typecheck(sid, 'string', 'touch');
-        this.#typecheck(sessionData, 'Object', 'touch');
-        if(callback !== null) this.#typecheck(callback, 'Function', 'touch');
+        this.#typecheck(sessionData, 'object', 'touch');
+        if(callback !== null) this.#typecheck(callback, 'function', 'touch');
 
         try{
             const expire = Date.now() + (sessionData.cookie.maxAge || this.#defaultAge);
@@ -178,7 +178,7 @@ class ExpressSessionStore extends session.Store {
      * @param {{null | Function({null | Error})}} callback 
      */
     cleanup(callback=null){
-        if(callback !== null) this.#typecheck(callback, 'Function', 'cleanup');
+        if(callback !== null) this.#typecheck(callback, 'function', 'cleanup');
 
         try {
             this.#dbConnection.prepare(`
