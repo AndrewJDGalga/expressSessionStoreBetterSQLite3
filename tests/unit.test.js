@@ -40,6 +40,18 @@ describe('ExpressSessionStore object', ()=>{
         it('malformed db object', ()=>{
             assert.throws(()=>new ExpressSessionStore({ db: '' }));
         });
+    });
+
+    describe('class internal type expectation', ()=>{
+        it('get throws sid type', ()=>{
+            assert.throws(()=>store.get(22, (err, val)=>{}));
+        });
+        it('get throws sid empty', ()=>{
+            assert.throws(()=>store.get('', (err, val)=>{}));
+        });
+        it('get throws function type', ()=>{
+            assert.throws(()=>store.get('22', ''));
+        });
     })
 
     describe('get method', ()=>{

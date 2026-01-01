@@ -10,13 +10,23 @@ class ExpressSessionStore extends session.Store {
     #dbConnection;
     #tableName;
 
-    #typecheck(received, expected, functionName){
-        if(typeof(received) !== expected) throw new Error(`${functionName} expected ${expected} and recieved ${typeof(received)}`);
+    /**
+     * Not boolean compatible
+     * @access private
+     * @param {any} received 
+     * @param {string} expectedTypeName 
+     * @param {string} functionName 
+     * @throws
+     */
+    #typecheck(received, expectedTypeName, functionName){
+        if(!received) throw new Error(`${functionName} expected ${expectedTypeName} and recieved {null | empty}`);
+        if(typeof(received) !== expectedTypeName) throw new Error(`${functionName} expected ${expectedTypeName} and recieved ${typeof(received)}`);
     }
 
     /**
      * @access public
      * @param {Object} options 
+     * @throws
      */
     constructor(options) {
         super(options);
