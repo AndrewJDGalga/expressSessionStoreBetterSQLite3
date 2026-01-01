@@ -22,7 +22,14 @@ describe('ExpressSessionStore object', ()=>{
     afterEach(()=>{
         sinon.restore();
     });
+    
+    /* constructor is simple and will create file ->no empty unit test */
 
+    describe('constructor throws', ()=>{
+        it('external path', ()=>{
+            assert.throws(()=>{new ExpressSessionStore({dbPath: '../../../blargh'})});
+        });
+    })
 
     describe('get method', ()=>{
         const sid = 'test-sess-id';
