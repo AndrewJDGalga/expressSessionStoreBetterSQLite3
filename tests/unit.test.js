@@ -87,6 +87,13 @@ describe('ExpressSessionStore object', ()=>{
                     done();
                 });
             });
+            it('malformed json from database', ()=>{
+                mockDB.prepare().get.withArgs(sid).returns('');
+                store.get(sid, (err, data)=>{
+                    assert.strictEqual(err, null);
+                    assert.strictEqual(data, null);
+                });
+            });
         });
 
         describe('fails to retrieve session data', ()=>{
