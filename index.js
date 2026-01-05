@@ -57,8 +57,8 @@ class ExpressSessionStore extends session.Store {
                 select sess from ${this.#tableName}
                     where sid = ?
             `).get(sid);
-            const sessData = row ? JSON.parse(row.sess) : null;
-            callback(null, sessData);
+
+            callback(null, JSON.parse(row.sess));
         }catch(e){
             callback(e, null);
         }
