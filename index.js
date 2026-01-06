@@ -118,8 +118,7 @@ class ExpressSessionStore extends session.Store {
             const allRows = this.#dbConnection.prepare(`
                 select sess from ${this.#tableName};
             `).all();
-            const sessData = allRows ? allRows.map(row => JSON.parse(row.sess)) : null;
-            callback(null, sessData);
+            callback(null, allRows.map(row => JSON.parse(row.sess)));
         }catch(e){
             callback(e, null);
         }

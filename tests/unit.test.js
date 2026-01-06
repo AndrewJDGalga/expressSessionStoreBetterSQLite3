@@ -191,11 +191,11 @@ describe('ExpressSessionStore object', ()=>{
             mockDB.prepare().all.returns(null);
 
             store.all((e, val)=>{
-                assert.strictEqual(e, null);
+                assert.notStrictEqual(e, null);
                 assert.strictEqual(val, null);
             });
         });
-        it('error', ()=>{
+        it('database error', ()=>{
             const error = new Error('Some Database Error');
             mockDB.prepare().all.throws(error);
 
