@@ -120,11 +120,7 @@ describe('ExpressSessionStore object', ()=>{
 
     describe('set method', ()=>{
         let expire;
-
-        beforeEach(()=>{
-            sinon.stub(Date, 'now').returns(1000);
-            expire = Date.now()+1;
-        })
+        
         afterEach(()=>{
             sinon.restore();
         });
@@ -133,20 +129,40 @@ describe('ExpressSessionStore object', ()=>{
         const sessData = { userId: 123, cookie: { maxAge: 1 }};
         const sessStr = JSON.stringify(sessData);
 
-        it('new entry', ()=>{
-            mockDB.prepare().run.withArgs(sid, sessStr, expire);
+        describe('correct date', ()=>{
+            beforeEach(()=>{
+                sinon.stub(Date, 'now').returns(1000);
+                expire = Date.now()+1;
+            });
 
-            store.set(sid, sessData, (e)=>{
-                assert.strictEqual(e, null);
+            it('new entry', ()=>{
+                mockDB.prepare().run.withArgs(sid, sessStr, expire);
+    
+                store.set(sid, sessData, (e)=>{
+                    assert.strictEqual(e, null);
+                });
+            });
+            it('database error', ()=>{
+                const error = new Error('Database Error');
+                mockDB.prepare().run.withArgs(sid, sessStr, expire).throws(error);
+    
+                store.set(sid, sessData, (err)=>{
+                    assert.strictEqual(err, error);
+                });
             });
         });
 
-        it('database error', ()=>{
-            const error = new Error('Database Error');
-            mockDB.prepare().run.withArgs(sid, sessStr, expire).throws(error);
+        describe('incorrect date', ()=>{
+            it('expire === 0', ()=>{
+                sinon.stub(Date, 'now').returns(0);
+                mockDB.prepare().run.withArgs(sid, sessStr, Date.now());
 
-            store.set(sid, sessData, (err)=>{
-                assert.strictEqual(err, error);
+                store.set(sid, sessData, (e)=>{
+                    assert.notStrictEqual(e, null);
+                });
+            });
+            it('expire < 0', ()=>{
+
             });
         });
     });
