@@ -187,6 +187,14 @@ describe('ExpressSessionStore object', ()=>{
                 done();
             })
         });
+        it('malformed JSON', ()=>{
+            mockDB.prepare().all.returns('jerry');
+
+            store.all((e, val)=>{
+                assert.notStrictEqual(e, null);
+                assert.strictEqual(val, null);
+            });
+        });
         it('null return', ()=>{
             mockDB.prepare().all.returns(null);
 
