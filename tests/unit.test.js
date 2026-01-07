@@ -42,7 +42,7 @@ describe('ExpressSessionStore object', ()=>{
         });
     });
 
-    describe('class internal type expectation', ()=>{
+    describe('internal type expectation enforcement', ()=>{
         const sid = 'test-sess-id';
 
         it('get throws sid type', ()=>{
@@ -70,6 +70,9 @@ describe('ExpressSessionStore object', ()=>{
                 assert.strictEqual(typeof(err), 'object');
             });
         });
+        it('clear throws callback not a function', ()=>{
+            assert.throws(()=>store.clear(0));
+        })
     })
 
     describe('get method', ()=>{
