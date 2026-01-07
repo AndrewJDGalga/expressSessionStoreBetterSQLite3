@@ -162,7 +162,12 @@ describe('ExpressSessionStore object', ()=>{
                 });
             });
             it('expire < 0', ()=>{
+                sinon.stub(Date, 'now').returns(-1);
+                mockDB.prepare().run.withArgs(sid, sessStr, Date.now());
 
+                store.set(sid, sessData, (e)=>{
+                    assert.notStrictEqual(e, null);
+                });
             });
         });
     });
