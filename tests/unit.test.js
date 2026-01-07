@@ -175,6 +175,10 @@ describe('ExpressSessionStore object', ()=>{
     describe('destroy method', ()=>{
         const sid = 'test-sess-id';
 
+        it('no throw when null callback', ()=>{
+            mockDB.prepare().run.withArgs(sid);
+            assert.doesNotThrow(()=>store.destroy(sid));
+        });
         it('deleted successfully', ()=>{
             mockDB.prepare().run.withArgs(sid);
 
@@ -265,7 +269,7 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('clear method', ()=>{
-        it('no throw without callback', ()=>{
+        it('no throw when null callback', ()=>{
             assert.doesNotThrow(()=>store.clear());
         });
         it('cleared DB', ()=>{
@@ -297,7 +301,7 @@ describe('ExpressSessionStore object', ()=>{
                 expire = Date.now()+1;
             });
 
-            it('no throw without callback', ()=>{
+            it('no throw when null callback', ()=>{
                 mockDB.prepare().run.withArgs(expire, sid).returns(null);
                 assert.doesNotThrow(()=>store.touch(sid, sessData));
             });
@@ -347,7 +351,7 @@ describe('ExpressSessionStore object', ()=>{
             sinon.restore();
         })
 
-        it('no throw without callback', ()=>{
+        it('no throw when null callback', ()=>{
             mockDB.prepare().run.withArgs(Date.now());
             assert.doesNotThrow(()=>store.cleanup());
         });
