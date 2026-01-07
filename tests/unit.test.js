@@ -285,29 +285,49 @@ describe('ExpressSessionStore object', ()=>{
     describe('touch method', ()=>{
         const sid = 'test-sess-id';
         const sessData = { userId: 123, cookie: { maxAge: 1 }};
-
-        let expire;
-        beforeEach(()=>{
-            sinon.stub(Date, 'now').returns(1000);
-            expire = Date.now()+1;
-        })
         afterEach(()=>{
             sinon.restore();
         });
 
-        it("did or didn't update session", ()=>{
-            mockDB.prepare().run.withArgs(expire, sid).returns(null);
-            
-            store.touch(sid, sessData, (e)=>{
-                assert.strictEqual(e, null);
+        describe('correct date', ()=>{
+            let expire;
+            beforeEach(()=>{
+                sinon.stub(Date, 'now').returns(1000);
+                expire = Date.now()+1;
+            });
+
+            it("did or didn't update session", ()=>{
+                mockDB.prepare().run.withArgs(expire, sid).returns(null);
+                
+                store.touch(sid, sessData, (e)=>{
+                    assert.strictEqual(e, null);
+                });
+            });
+            it('database error', ()=>{
+                const error = new Error('Some Database Error');
+                mockDB.prepare().run.withArgs(expire, sid).throws(error);
+    
+                store.touch(sid, sessData, (e)=>{
+                    assert.strictEqual(e, error);
+                });
             });
         });
-        it('database error', ()=>{
-            const error = new Error('Some Database Error');
-            mockDB.prepare().run.withArgs(expire, sid).throws(error);
+        describe('incorrect date', ()=>{
+            it('expire === 0', ()=>{
+                sinon.stub(Date, 'now').returns(0);
+                mockDB.prepare().run.withArgs(Date.now(), sid);
 
-            store.touch(sid, sessData, (e)=>{
-                assert.strictEqual(e, error);
+                store.touch(sid, sessData, (e)=>{
+                    assert.notStrictEqual(e, null);
+                });
+            });
+            it('expire < 0', ()=>{
+                sinon.stub(Date, 'now').returns(-1);
+                mockDB.prepare().run.withArgs(Date.now(), sid);
+
+                store.touch(sid, sessData, (e)=>{
+                    assert.notStrictEqual(e, null);
+                });
             });
         });
     });
