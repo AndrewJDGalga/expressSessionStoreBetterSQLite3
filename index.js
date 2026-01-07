@@ -184,11 +184,11 @@ class ExpressSessionStore extends session.Store {
 
     /**
      * @access public
-     * @param {{null | Function({null | Error})}} callback 
+     * @param {null | Function({null | Error})} callback 
      */
     cleanup(callback=null){
         try {
-            if(callback !== null) this.#typecheck(callback, 'function', 'cleanup');
+            callback && this.#typecheck(callback, 'function', 'cleanup');
 
             this.#dbConnection.prepare(`
                 delete from ${this.#tableName} where expire < ?

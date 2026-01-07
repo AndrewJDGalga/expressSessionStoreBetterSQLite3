@@ -333,6 +333,19 @@ describe('ExpressSessionStore object', ()=>{
     });
 
     describe('cleanup method', ()=>{
+        let clock;
+        beforeEach(()=>{
+            clock = sinon.useFakeTimers();
+            clock.tick();
+        });
+        afterEach(()=>{
+            sinon.restore();
+        })
+
+        it('base call no throw', ()=>{
+            mockDB.prepare().run.withArgs(Date.now());
+            assert.doesNotThrow(()=>store.cleanup());
+        });
         it('null to clean',()=>{
             mockDB.prepare().run.withArgs(Date.now());
 
@@ -349,9 +362,7 @@ describe('ExpressSessionStore object', ()=>{
             });
         });
         it('removes items', (done)=>{
-            const clock = sinon.useFakeTimers();
             mockDB.prepare().run.withArgs(Date.now());
-            clock.tick();
 
             store.cleanup((e)=>{
                 assert.strictEqual(e, null);
