@@ -264,10 +264,11 @@ describe('ExpressSessionStore object', ()=>{
         });
     });
 
-    describe('clear method', ()=>{    
+    describe('clear method', ()=>{
+        it('no throw without callback', ()=>{
+            assert.doesNotThrow(()=>store.clear());
+        });
         it('cleared DB', ()=>{
-            mockDB.prepare().run;
-
             store.clear((e)=>{
                 assert.strictEqual(e, null);
             });
