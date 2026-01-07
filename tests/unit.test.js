@@ -296,6 +296,10 @@ describe('ExpressSessionStore object', ()=>{
                 expire = Date.now()+1;
             });
 
+            it('no throw without callback', ()=>{
+                mockDB.prepare().run.withArgs(expire, sid).returns(null);
+                assert.doesNotThrow(()=>store.touch(sid, sessData));
+            });
             it("did or didn't update session", ()=>{
                 mockDB.prepare().run.withArgs(expire, sid).returns(null);
                 
@@ -342,7 +346,7 @@ describe('ExpressSessionStore object', ()=>{
             sinon.restore();
         })
 
-        it('base call no throw', ()=>{
+        it('no throw without callback', ()=>{
             mockDB.prepare().run.withArgs(Date.now());
             assert.doesNotThrow(()=>store.cleanup());
         });
