@@ -135,6 +135,10 @@ describe('ExpressSessionStore object', ()=>{
                 expire = Date.now()+1;
             });
 
+            it('no throw when null callback', ()=>{
+                mockDB.prepare().run.withArgs(sid, sessStr, expire);
+                assert.doesNotThrow(()=>store.set(sid, sessData));
+            });
             it('new entry', ()=>{
                 mockDB.prepare().run.withArgs(sid, sessStr, expire);
     
