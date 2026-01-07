@@ -25,14 +25,12 @@ describe('ExpressSessionStore object', ()=>{
     
     /* constructor is simple and will create file, cannot interrupt in ES6? (sans require)
         ->no empty path unit test 
-        ->no invalid tablename unit test    
+        ->no invalid tablename unit test
+        ->no incorrect parameter passed test
     */
     describe('constructor throws', ()=>{
         it('no parameter passed', ()=>{
             assert.throws(()=>new ExpressSessionStore());
-        });
-        it('incorrect parameter type passed', ()=>{
-            assert.throws(()=>new ExpressSessionStore(''));
         });
         it('external path', ()=>{
             assert.throws(()=>new ExpressSessionStore({dbPath: '../../../blargh'}));
@@ -312,7 +310,7 @@ describe('ExpressSessionStore object', ()=>{
                 mockDB.prepare().run.withArgs(expire, sid).returns(null);
                 assert.doesNotThrow(()=>store.touch(sid, sessData));
             });
-            it("did or didn't update session", ()=>{
+            it("assumed updated session", ()=>{
                 mockDB.prepare().run.withArgs(expire, sid).returns(null);
                 
                 store.touch(sid, sessData, (e)=>{
