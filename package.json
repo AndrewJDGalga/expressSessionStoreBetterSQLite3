@@ -19,9 +19,9 @@
   "author": "AndrewJDGalga",
   "type": "module",
   "main": "index.js",
-  "exports": {
-    "." : "./index.js"
-  },
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "mocha ./tests"
   },
